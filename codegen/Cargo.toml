@@ -1,0 +1,16 @@
+[package]
+authors     = ["Philippe Lafontaine <lafontaine.philippe@gmail.com>"]
+description = "Procedual macros and code generation for the sewage library."
+edition     = "2018"
+name        = "sewage-codegen"
+version     = "0.1.0"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+once_cell = "1.4.1"
+
+[dependencies.syn]
+features = ["full"]
+version  = "1.0.41"
