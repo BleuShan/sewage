@@ -1,6 +1,3 @@
 mod test;
 
-pub(crate) use test::{
-    TestAttribute,
-    TestAttributeArgs,
-};
+pub(crate) use test::TestAttribute;

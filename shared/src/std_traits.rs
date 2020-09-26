@@ -1,6 +1,4 @@
-//! The internal prelude.
-//!
-//! It mainly serves as a convenience reexport bucket.
+//! Common std trait and associated derive reexport
 
 pub use derive_more::{
     AsMut,
@@ -22,9 +20,7 @@ pub use std::{
         AsRef,
         TryFrom,
     },
-    error::Error as StdError,
     fmt::{
-        self as stdfmt,
         Debug,
         Display,
     },
@@ -36,4 +32,3 @@ pub use std::{
     },
     str::FromStr,
 };
-pub use thiserror::Error;

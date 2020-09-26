@@ -1,0 +1,7 @@
+error: Missing arguments
+ --> $DIR/no_arguments.rs:1:1
+  |
+1 | #[sewage::test]
+  | ^^^^^^^^^^^^^^^
+  |
+  = note: this error originates in an attribute macro (in Nightly builds, run with -Z macro-backtrace for more info)

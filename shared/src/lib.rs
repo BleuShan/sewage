@@ -9,8 +9,6 @@
 #![feature(
     external_doc,
     doc_cfg,
-    proc_macro_diagnostic,
-    proc_macro_span,
     box_patterns,
     box_syntax,
     format_args_capture,
@@ -41,20 +39,8 @@
     include = "../README.md"
 )]
 
-mod attributes;
-mod prelude;
-
-use attributes::TestAttribute;
-use prelude::*;
-
-///
-#[proc_macro_attribute]
-pub fn test(args: TokenStream, item: TokenStream) -> TokenStream {
-    match TestAttribute::parse(args, item) {
-        Ok(attribute) => attribute.into(),
-        Err(error) => {
-            Diagnostic::spanned(error.span().unwrap(), Level::Error, error.to_string()).emit();
-            TokenStream::new()
-        }
-    }
-}
+pub mod error;
+mod macros;
+pub mod reexports;
+pub mod std_traits;
+pub mod tracing;

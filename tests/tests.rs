@@ -17,6 +17,6 @@ const COMPILE_TEST_ROOT: &str = "tests/compile";
 #[test]
 fn compile_test() {
     let tests = TryBuildTestCases::new();
-    tests.pass(format!("{COMPILE_TEST_ROOT}/**/pass/*"));
-    tests.compile_fail(format!("{COMPILE_TEST_ROOT}/**/fail/*"));
+    tests.pass(format!("{COMPILE_TEST_ROOT}/**/pass/**/*.rs"));
+    tests.compile_fail(format!("{COMPILE_TEST_ROOT}/**/fail/**/*.rs"));
 }

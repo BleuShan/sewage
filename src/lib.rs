@@ -8,6 +8,7 @@
 )]
 #![feature(
     external_doc,
+    doc_cfg,
     box_patterns,
     box_syntax,
     format_args_capture,
@@ -15,8 +16,8 @@
     or_patterns,
     trait_alias,
     try_blocks,
-    type_alias_impl_trait,
-    doc_cfg
+    try_trait,
+    type_alias_impl_trait
 )]
 #![doc(
     test(
@@ -30,17 +31,15 @@
             or_patterns,
             trait_alias,
             try_blocks,
+            try_trait,
             type_alias_impl_trait,
         ))
     ),
     include = "../README.md"
 )]
 
-#[macro_use]
-#[doc(hidden)]
-pub mod macros;
-pub(crate) mod internal;
 pub mod prelude;
+pub(crate) mod sealed;
 pub use codegen::*;
 
 use crate::prelude::*;
@@ -52,3 +51,6 @@ pub enum Test {
     #[display(fmt = "nothing test")]
     Nothing,
 }
+
+#[instrument]
+async fn make() {}

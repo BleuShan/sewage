@@ -6,59 +6,19 @@ name        = "sewage"
 version     = "0.1.0"
 
 [workspace]
-members = ["codegen"]
-
-[dependencies]
-thiserror       = "1.0.20"
-tracing-error   = "0.1.2"
-tracing-futures = "0.2.4"
+members = ["codegen", "shared"]
 
 [dependencies.codegen]
 package = "sewage-codegen"
 path    = "codegen"
 
-[dependencies.chrono]
-features = ["serde"]
-version  = "0.4.16"
-
-[dependencies.derive_more]
-default-features = false
-features         = [
-    "as_mut",
-    "as_ref",
-    "deref",
-    "deref_mut",
-    "from",
-    "from_str",
-    "index",
-    "index_mut",
-    "into",
-    "into_iterator",
-    "try_into",
-    "display",
-    "nightly",
-]
-version          = "0.99.10"
-
-[dependencies.parking_lot]
-features = ["nightly"]
-version  = "0.11"
+[dependencies.shared]
+package = "sewage-shared"
+path    = "shared"
 
 [dependencies.serde]
 features = ["derive", "alloc"]
 version  = "1.0.116"
-
-[dependencies.tracing]
-features = ["attributes"]
-version  = "0.1.19"
-
-[dependencies.tracing-subscriber]
-features = ["parking_lot"]
-version  = "0.2.12"
-
-[dependencies.uuid]
-features = ["v4", "serde"]
-version  = "0.8"
 
 [dev-dependencies.trybuild]
 features = ["diff"]

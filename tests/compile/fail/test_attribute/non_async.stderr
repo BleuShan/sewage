@@ -1,0 +1,5 @@
+error: Must be async
+ --> $DIR/non_async.rs:2:1
+  |
+2 | fn run() {}
+  | ^^^^^^^^
