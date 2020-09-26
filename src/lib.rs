@@ -43,14 +43,3 @@ pub(crate) mod sealed;
 pub use codegen::*;
 
 use crate::prelude::*;
-
-/// Testing
-#[derive(Debug, Display)]
-pub enum Test {
-    /// Some other test
-    #[display(fmt = "nothing test")]
-    Nothing,
-}
-
-#[instrument]
-async fn make() {}
