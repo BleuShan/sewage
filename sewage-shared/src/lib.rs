@@ -1,10 +1,11 @@
 #![warn(
+    clippy::all,
+    clippy::pedantic,
     missing_debug_implementations,
     missing_docs,
     nonstandard_style,
     rust_2018_idioms,
-    clippy::all,
-    clippy::pedantic
+    unreachable_pub
 )]
 #![feature(
     external_doc,
@@ -39,8 +40,9 @@
     include = "../README.md"
 )]
 
-pub mod error;
 mod macros;
+
+pub mod error;
 pub mod reexports;
 pub mod std_traits;
 pub mod tracing;

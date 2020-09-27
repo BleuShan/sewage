@@ -10,12 +10,15 @@
 #![feature(
     external_doc,
     doc_cfg,
+    proc_macro_diagnostic,
+    proc_macro_span,
     box_patterns,
     box_syntax,
     format_args_capture,
     never_type,
     or_patterns,
     trait_alias,
+    trivial_bounds,
     try_blocks,
     try_trait,
     type_alias_impl_trait
@@ -39,8 +42,20 @@
     include = "../README.md"
 )]
 
-pub mod prelude;
-pub(crate) mod sealed;
-pub use codegen::*;
+mod attributes;
+mod prelude;
 
-use crate::prelude::*;
+use attributes::TestAttribute;
+use prelude::*;
+
+///
+#[proc_macro_attribute]
+pub fn test(args: TokenStream, item: TokenStream) -> TokenStream {
+    match TestAttribute::parse(args, item) {
+        Ok(attribute) => attribute.into(),
+        Err(error) => {
+            Diagnostic::spanned(error.span().unwrap(), Level::Error, error.to_string()).emit();
+            TokenStream::new()
+        }
+    }
+}

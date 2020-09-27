@@ -17,7 +17,7 @@ version  = "1.0.23"
 
 [dependencies.shared]
 package = "sewage-shared"
-path    = "../shared"
+path    = "../sewage-shared"
 
 [dependencies.syn]
 features = ["full"]

@@ -1,0 +1,10 @@
+[package]
+authors     = ["Philippe Lafontaine <lafontaine.philippe@gmail.com>"]
+description = "Shared test library for the sewage library."
+edition     = "2018"
+name        = "sewage-test"
+version     = "0.1.0"
+
+[dependencies.trybuild]
+features = ["diff"]
+version  = "1.0.35"

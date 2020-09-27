@@ -35,6 +35,24 @@ fn to_argument_value_tokens<'c, 'a>(
     ))
 }
 
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+enum TestAttributeType {
+    Runtime,
+    Trace,
+}
+
+impl FromStr for TestAttributeType {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Self> {
+        match s {
+            "runtime" => Ok(Self::Runtime),
+            "trace" => Ok(Self::Trace),
+            _ => Err(Error::new(Span::call_site(), format!("Invalid value: {s}"))),
+        }
+    }
+}
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 enum TestAttributeArg {
     Runtime(Path),
@@ -121,8 +139,14 @@ impl From<TestAttribute> for TokenStream {
 }
 
 cfg_test! {
-    mod tests {
+    mod test {
         use super::*;
+
+        #[test]
+        fn attribute_arg_type_should_be_parseable_from_str() {
+            assert_eq!("runtime".parse::<TestAttributeType>().unwrap(), TestAttributeType::Runtime);
+            assert_eq!("trace".parse::<TestAttributeType>().unwrap(), TestAttributeType::Trace);
+        }
 
         #[test]
         fn test_attribute_should_fail_with_no_args() {

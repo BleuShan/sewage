@@ -6,20 +6,20 @@ name        = "sewage"
 version     = "0.1.0"
 
 [workspace]
-members = ["codegen", "shared"]
+members = ["sewage-codegen", "sewage-shared"]
 
 [dependencies.codegen]
 package = "sewage-codegen"
-path    = "codegen"
+path    = "sewage-codegen"
 
 [dependencies.shared]
 package = "sewage-shared"
-path    = "shared"
+path    = "sewage-shared"
 
 [dependencies.serde]
 features = ["derive", "alloc"]
 version  = "1.0.116"
 
-[dev-dependencies.trybuild]
-features = ["diff"]
-version  = "1.0.35"
+[dev-dependencies.test_prelude]
+package = "sewage-test"
+path    = "sewage-test"
