@@ -15,10 +15,13 @@
     format_args_capture,
     never_type,
     or_patterns,
+    result_flattening,
     trait_alias,
+    trivial_bounds,
     try_blocks,
     try_trait,
-    type_alias_impl_trait
+    type_alias_impl_trait,
+    unwrap_infallible
 )]
 #![doc(
     test(
@@ -30,10 +33,13 @@
             format_args_capture,
             never_type,
             or_patterns,
+            result_flattening,
             trait_alias,
+            trivial_bounds,
             try_blocks,
             try_trait,
             type_alias_impl_trait,
+            unwrap_infallible
         ))
     ),
     include = "../README.md"

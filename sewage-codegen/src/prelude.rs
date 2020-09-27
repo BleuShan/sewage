@@ -1,32 +1,22 @@
-pub(crate) use proc_macro::{
-    Diagnostic,
-    Level,
-    TokenStream,
-};
-pub(crate) use proc_macro2::{
-    Delimiter,
-    Span,
-    TokenStream as TokenStream2,
-    TokenTree,
-};
+pub(crate) use proc_macro::TokenStream;
+pub(crate) use proc_macro2::TokenStream as TokenStream2;
+pub(crate) use proc_macro_error::*;
 pub(crate) use quote::{
     quote,
-    quote_spanned,
     ToTokens,
     TokenStreamExt as TokenStream2Ext,
 };
 pub(crate) use shared::{
-    cfg_test,
+    result::*,
     std_traits::*,
 };
-use std::result::Result as StdResult;
+
 pub(crate) use syn::{
     parse,
     parse::{
         Parse,
         ParseStream,
     },
-    parse2,
     Error,
 };
 

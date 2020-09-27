@@ -17,11 +17,13 @@
     format_args_capture,
     never_type,
     or_patterns,
+    result_flattening,
     trait_alias,
     trivial_bounds,
     try_blocks,
     try_trait,
-    type_alias_impl_trait
+    type_alias_impl_trait,
+    unwrap_infallible
 )]
 #![doc(
     test(
@@ -33,10 +35,13 @@
             format_args_capture,
             never_type,
             or_patterns,
+            result_flattening,
             trait_alias,
+            trivial_bounds,
             try_blocks,
             try_trait,
             type_alias_impl_trait,
+            unwrap_infallible
         ))
     ),
     include = "../README.md"
@@ -50,12 +55,9 @@ use prelude::*;
 
 ///
 #[proc_macro_attribute]
+#[proc_macro_error]
 pub fn test(args: TokenStream, item: TokenStream) -> TokenStream {
-    match TestAttribute::parse(args, item) {
-        Ok(attribute) => attribute.into(),
-        Err(error) => {
-            Diagnostic::spanned(error.span().unwrap(), Level::Error, error.to_string()).emit();
-            TokenStream::new()
-        }
-    }
+    let attribute = TestAttribute::parse(args, item);
+    abort_if_dirty();
+    TokenStream::from(attribute)
 }

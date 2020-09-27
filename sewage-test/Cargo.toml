@@ -5,6 +5,10 @@ edition     = "2018"
 name        = "sewage-test"
 version     = "0.1.0"
 
+[dependencies.proptest]
+features = ["unstable"]
+version  = "0.10.1"
+
 [dependencies.trybuild]
 features = ["diff"]
 version  = "1.0.35"

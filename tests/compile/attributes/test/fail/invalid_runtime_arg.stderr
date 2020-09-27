@@ -1,0 +1,15 @@
+error: Missing arguments
+ --> $DIR/invalid_runtime_arg.rs:1:1
+  |
+1 | #[sewage::test(runtime)]
+  | ^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: this error originates in an attribute macro (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: Invalid identifier: \"tokio\"
+ --> $DIR/invalid_runtime_arg.rs:4:1
+  |
+4 | #[sewage::test(tokio)]
+  | ^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: this error originates in an attribute macro (in Nightly builds, run with -Z macro-backtrace for more info)

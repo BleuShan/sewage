@@ -1,57 +1,13 @@
 use crate::prelude::*;
 use std::collections::HashSet;
 use syn::{
-    buffer::Cursor,
-    parse::StepCursor,
+    group,
+    token::Paren,
     Ident,
     ItemFn,
     Path,
     Token,
 };
-
-fn to_argument_value_tokens<'c, 'a>(
-    cursor: StepCursor<'c, 'a>,
-) -> Result<(TokenStream2, Cursor<'c>)> {
-    let mut current = *cursor;
-    while let Some((tt, next)) = current.token_tree() {
-        match tt {
-            TokenTree::Group(group) if group.delimiter() == Delimiter::Parenthesis => {
-                return Ok((group.stream(), next))
-            }
-            TokenTree::Punct(punct) if punct.as_char() == '=' => match next.token_tree() {
-                Some((tokens, tail)) => {
-                    let span = tokens.span();
-                    let stream = quote_spanned! {span => #tokens};
-                    return Ok((stream, tail));
-                }
-                _ => current = next,
-            },
-            _ => current = next,
-        }
-    }
-    Err(Error::new_spanned(
-        cursor.token_stream(),
-        "Missing arguments",
-    ))
-}
-
-#[derive(Copy, Clone, Debug, PartialEq, Eq)]
-enum TestAttributeType {
-    Runtime,
-    Trace,
-}
-
-impl FromStr for TestAttributeType {
-    type Err = Error;
-
-    fn from_str(s: &str) -> Result<Self> {
-        match s {
-            "runtime" => Ok(Self::Runtime),
-            "trace" => Ok(Self::Trace),
-            _ => Err(Error::new(Span::call_site(), format!("Invalid value: {s}"))),
-        }
-    }
-}
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 enum TestAttributeArg {
@@ -61,14 +17,25 @@ enum TestAttributeArg {
 impl Parse for TestAttributeArg {
     fn parse(input: ParseStream<'_>) -> Result<Self> {
         let ident: Ident = input.parse()?;
-        let name = ident.to_string().to_lowercase();
-        if name == "runtime" {
-            let args = input.step(to_argument_value_tokens)?;
-            let pat = parse2(args)?;
-            return Ok(Self::Runtime(pat));
+        let name = ident.to_string().to_ascii_lowercase();
+        match name.as_str() {
+            "runtime" => {
+                if input.peek(Paren) {
+                    group::parse_parens(input)
+                        .map(|parens| parens.content.parse().map(Self::Runtime))
+                        .flatten()
+                } else if input.peek(Token![=]) {
+                    input.parse::<Token![=]>()?;
+                    input.parse().map(Self::Runtime)
+                } else {
+                    Err(Error::new(input.span(), "Missing arguments"))
+                }
+            }
+            _ => Err(Error::new(
+                input.span(),
+                format!(r#"Invalid identifier: "{name}""#),
+            )),
         }
-
-        Err(Error::new_spanned(ident, "Invalid"))
     }
 }
 
@@ -110,18 +77,10 @@ pub struct TestAttribute {
 }
 
 impl TestAttribute {
-    pub fn parse(args: TokenStream, item: TokenStream) -> Result<Self> {
-        Ok(Self {
-            args: parse(args)?,
-            item: parse(item)?,
-        })
-    }
-    cfg_test! {
-         pub fn parse2(args: TokenStream2, item: TokenStream2) -> Result<Self> {
-            Ok(Self {
-                args: parse2(args)?,
-                item: parse2(item)?,
-            })
+    pub fn parse(args: TokenStream, item: TokenStream) -> Self {
+        Self {
+            args: parse(args).unwrap_or_abort(),
+            item: parse(item).unwrap_or_abort(),
         }
     }
 }
@@ -135,39 +94,5 @@ impl ToTokens for TestAttribute {
 impl From<TestAttribute> for TokenStream {
     fn from(attribute: TestAttribute) -> Self {
         TokenStream::from(attribute.into_token_stream())
-    }
-}
-
-cfg_test! {
-    mod test {
-        use super::*;
-
-        #[test]
-        fn attribute_arg_type_should_be_parseable_from_str() {
-            assert_eq!("runtime".parse::<TestAttributeType>().unwrap(), TestAttributeType::Runtime);
-            assert_eq!("trace".parse::<TestAttributeType>().unwrap(), TestAttributeType::Trace);
-        }
-
-        #[test]
-        fn test_attribute_should_fail_with_no_args() {
-            let args = TokenStream2::new();
-            let item = quote! {
-                fn test() {}
-            };
-            let result = TestAttribute::parse2(args, item);
-            assert!(result.is_err())
-        }
-
-        #[test]
-        fn test_attribute_should_fail_with_non_async() {
-            let args = quote!{
-                runtime(tokio)
-            };
-            let item = quote! {
-                fn test() {}
-            };
-            let result = TestAttribute::parse2(args, item);
-            assert!(result.is_err())
-        }
     }
 }

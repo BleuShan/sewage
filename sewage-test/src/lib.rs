@@ -15,6 +15,7 @@
     format_args_capture,
     never_type,
     or_patterns,
+    result_flattening,
     trait_alias,
     try_blocks,
     try_trait,
@@ -30,6 +31,7 @@
             format_args_capture,
             never_type,
             or_patterns,
+            result_flattening,
             trait_alias,
             try_blocks,
             try_trait,
@@ -40,3 +42,4 @@
 )]
 
 pub mod compile;
+pub mod prelude;
