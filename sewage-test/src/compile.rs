@@ -6,7 +6,8 @@ use std::{
 };
 use trybuild::TestCases;
 
-/// Try build from a root path.
+/// Execute the compilation test cases from a root path.
+/// Any rust source files under a folder named pass or fail will pass repectively pass or fail.
 pub fn try_build_root<PathRef>(root_path: PathRef)
 where
     PathRef: AsRef<Path>,
@@ -19,7 +20,7 @@ where
     })
 }
 
-/// Try build using the configured thing
+/// Execute the compilation test cases as configured.
 pub fn try_build<BuilderFn>(build: BuilderFn)
 where
     BuilderFn: FnOnce(&TestCases),
